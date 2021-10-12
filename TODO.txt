@@ -1,0 +1,1 @@
+Do not forget to install django-channels, channels-redis and redis
