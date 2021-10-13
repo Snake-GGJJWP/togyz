@@ -1,0 +1,15 @@
+.square {
+	width: 50px;
+	height: 100px;
+	background-color: #b3b3b3;
+	display: inline-block;
+	border: 1px solid black;
+}
+
+.kum {
+	width: 40%;
+	height: 20%;
+	border-radius: 50%;
+	display: block;
+	background-color: black;
+}

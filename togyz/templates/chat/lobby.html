@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Rooms</title>
+    {% load static %}
+</head>
+<body>
+    What chat room would you like to enter?<br>
+    <input id="room-name-input" type="text" size="100"><br>
+    <div>
+        <input type="radio" id="white" name="color"> White
+        <input type="radio" id="black" name="color"> Black
+    </div>
+    <input id="room-name-submit" type="button" value="Enter">
+
+    <script src="{% static 'js/lobby.js' %}"></script>
+</body>
+</html>
