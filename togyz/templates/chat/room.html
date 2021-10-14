@@ -14,28 +14,43 @@
     {{ color|json_script:"color" }}
 
     <div id="opponent">
-        <div id="1" class="square" kum="0"></div>
-        <div id="2" class="square" kum="0"></div>
-        <div id="3" class="square" kum="0"></div>
-        <div id="4" class="square" kum="0"></div>
-        <div id="5" class="square" kum="0"></div>
-        <div id="6" class="square" kum="0"></div>
-        <div id="7" class="square" kum="0"></div>
-        <div id="8" class="square" kum="0"></div>
-        <div id="9" class="square" kum="0"></div>
+        {% for i in opponent %}
+            <div id="field{{i}}" class="square" kum="0" name="{{i}}">
+            </div>
+        {% endfor %}
     </div>
 
     <div id="you">
-        <div id="10" class="square" kum="0"></div>
-        <div id="11" class="square" kum="0"></div>
-        <div id="12" class="square" kum="0"></div>
-        <div id="13" class="square" kum="0"></div>
-        <div id="14" class="square" kum="0"></div>
-        <div id="15" class="square" kum="0"></div>
-        <div id="16" class="square" kum="1"></div>
-        <div id="17" class="square" kum="0"></div>
-        <div id="18" class="square" kum="0"></div>
+        {% for i in you%}
+            <div id="field{{i}}" class="square" kum="0" name="{{i}}">
+            </div>
+        {% endfor %}
     </div>
+
+
+    <!--<div id="opponent">
+        <div id="field18" class="square" kum="0" name="18"></div>
+        <div id="field17" class="square" kum="0" name="17"></div>
+        <div id="field16" class="square" kum="0" name="16"></div>
+        <div id="field15" class="square" kum="0" name="15"></div>
+        <div id="field14" class="square" kum="1" name="14"></div>
+        <div id="field13" class="square" kum="0" name="13"></div>
+        <div id="field12" class="square" kum="0" name="12"></div>
+        <div id="field11" class="square" kum="0" name="11"></div>
+        <div id="field10" class="square" kum="0" name="10"></div>
+    </div>
+
+    <div id="you">
+        <div id="field1" class="square" kum="0" name="1"></div>
+        <div id="field2" class="square" kum="0" name="2"></div>
+        <div id="field3" class="square" kum="0" name="3"></div>
+        <div id="field4" class="square" kum="0" name="4"></div>
+        <div id="field5" class="square" kum="0" name="5"></div>
+        <div id="field6" class="square" kum="0" name="6"></div>
+        <div id="field7" class="square" kum="0" name="7"></div>
+        <div id="field8" class="square" kum="0" name="8"></div>
+        <div id="field9" class="square" kum="0" name="9"></div>
+    </div> -->
 
     <script src="{% static 'js/room.js' %}"></script>
 </body>
