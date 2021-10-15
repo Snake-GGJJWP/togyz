@@ -21,3 +21,7 @@ def room(request, room_name, color):
         'opponent': opponent,
         'you': you
     })
+
+
+def test(request):
+    return render(request, 'chat/test.html')

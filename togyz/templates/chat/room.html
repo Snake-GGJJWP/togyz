@@ -7,50 +7,78 @@
     <link rel="stylesheet" href="{% static 'css/room.css' %}">
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
-    {{ room_name|json_script:"room-name" }}
-    {{ color|json_script:"color" }}
+    <div id="play-area">
+        <div id="info">
+            <img id="sphere" style="display: none" src="{% static 'img/sphere.png' %}" alt="">
+            {{ room_name|json_script:"room-name" }}
+            {{ color|json_script:"color" }}
+        </div>
+        <div id="chat">
+            <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br>
+            <input id="chat-message-input" type="text" size="100"><br>
+            <input id="chat-message-submit" type="button" value="Send">
+        </div>
+        <table id="board">
+            <tr>
+                {% for i in opponent %}
+                    <td class="kum_counter opponent_counter">
+                        <p id="counter{{i}}" name="{{i}}">{{i}}</p>
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr id="opponent">
+                {% for i in opponent %}
+                    <td id="field{{i}}" class="square" kum="0" name="{{i}}">
+                    </td>
+                {% endfor %}
+            </tr>
 
-    <div id="opponent">
-        {% for i in opponent %}
-            <div id="field{{i}}" class="square" kum="0" name="{{i}}">
-            </div>
-        {% endfor %}
+            <tr id="you">
+                {% for i in you%}
+                    <td id="field{{i}}" class="square" kum="0" name="{{i}}">
+                    </td>
+                {% endfor %}
+            </tr>
+
+            <tr>
+                {% for i in you %}
+                    <td class="kum_counter your_counter">
+                        <p id="counter{{i}}" name="{{i}}">{{i}}</p>
+                    </td>
+                {% endfor %}
+            </tr>
+
+            
+        </table>    
     </div>
 
-    <div id="you">
-        {% for i in you%}
-            <div id="field{{i}}" class="square" kum="0" name="{{i}}">
-            </div>
-        {% endfor %}
-    </div>
-
-
-    <!--<div id="opponent">
-        <div id="field18" class="square" kum="0" name="18"></div>
-        <div id="field17" class="square" kum="0" name="17"></div>
-        <div id="field16" class="square" kum="0" name="16"></div>
-        <div id="field15" class="square" kum="0" name="15"></div>
-        <div id="field14" class="square" kum="1" name="14"></div>
-        <div id="field13" class="square" kum="0" name="13"></div>
-        <div id="field12" class="square" kum="0" name="12"></div>
-        <div id="field11" class="square" kum="0" name="11"></div>
-        <div id="field10" class="square" kum="0" name="10"></div>
-    </div>
-
-    <div id="you">
-        <div id="field1" class="square" kum="0" name="1"></div>
-        <div id="field2" class="square" kum="0" name="2"></div>
-        <div id="field3" class="square" kum="0" name="3"></div>
-        <div id="field4" class="square" kum="0" name="4"></div>
-        <div id="field5" class="square" kum="0" name="5"></div>
-        <div id="field6" class="square" kum="0" name="6"></div>
-        <div id="field7" class="square" kum="0" name="7"></div>
-        <div id="field8" class="square" kum="0" name="8"></div>
-        <div id="field9" class="square" kum="0" name="9"></div>
-    </div> -->
+    <!--<table id="board">
+        <tr id="">
+            <td id="field1" class="square" name="1">
+                <div><img src="https://img.icons8.com/fluency/25/000000/sphere.png"/></div>
+                <div><img src="https://img.icons8.com/fluency/25/000000/sphere.png"/></div>
+            </td>
+            <td id="field2" class="square" name="2"></td>
+            <td id="field3" class="square" name="3"></td>
+            <td id="field4" class="square" name="4"></td>
+            <td id="field5" class="square" name="5"></td>
+            <td id="field6" class="square" name="6"></td>
+            <td id="field7" class="square" name="7"></td>
+            <td id="field8" class="square" name="8"></td>
+            <td id="field9" class="square" name="9"></td>
+        </tr>
+        <tr id="">
+            <td id="field1" class="square" name="1"></td>
+            <td id="field2" class="square" name="2"></td>
+            <td id="field3" class="square" name="3"></td>
+            <td id="field4" class="square" name="4"></td>
+            <td id="field5" class="square" name="5"></td>
+            <td id="field6" class="square" name="6"></td>
+            <td id="field7" class="square" name="7"></td>
+            <td id="field8" class="square" name="8"></td>
+            <td id="field9" class="square" name="9"></td>
+        </tr>
+    </table>-->
 
     <script src="{% static 'js/room.js' %}"></script>
 </body>
