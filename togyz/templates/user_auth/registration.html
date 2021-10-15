@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% load static %}
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<title>Registration</title>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+	<script src="{% static 'js/user_auth.js' %}"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<link rel="stylesheet" href="{% static 'css/user_auth.css' %}">
+</head>
+<body>
+	<div class="text-center" style="padding:50px 0">
+	<div class="logo">register</div>
+	<div class="login-form-1">
+		<form method="POST" action="" id="register-form" class="text-left">
+			{% csrf_token %}
+			<div class="login-form-main-message"></div>
+			<div class="main-login-form">
+				<div class="login-group">
+					<div class="form-group">
+						<label for="reg_username" class="sr-only">Email address</label>
+						{{form.username}}
+					</div>
+					<div class="form-group">
+						<label for="reg_password" class="sr-only">Password</label>
+						{{form.password1}}
+					</div>
+					<div class="form-group">
+						<label for="reg_password_confirm" class="sr-only">Password Confirm</label>
+						{{form.password2}}
+					</div>
+					
+					<div class="form-group">
+						<label for="reg_email" class="sr-only">Email</label>
+						{{form.email}}
+					</div>
+				<button id="submit-button" type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+			</form>
+			</div>
+			<div class="etc-login-form">
+				<p>already have an account? <a href="#">login here</a></p>
+			</div>
+		{% for message in messages %}
+			<div style="text-align: center" class="alert alert-danger">{{message}}</div>
+		{% endfor %}
+
+	</div>
+	<script>
+		var form_fields = document.getElementsByTagName('input')
+		form_fields[1].placeholder='Username';
+		form_fields[2].placeholder='Enter password';
+		form_fields[3].placeholder='Re-enter Password';
+		form_fields[4].placeholder='Email'
+
+
+		for (var field in form_fields){	
+			form_fields[field].className += ' form-control'
+		}
+	</script>
+</div>
+</body>
+</html>
