@@ -1,5 +1,6 @@
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 const color = JSON.parse(document.getElementById('color').textContent);
+const username = JSON.parse(document.getElementById('username').textContent);
 if (color == "white") {
     var board_ind = [1,2,3,4,5,6,7,8,9];
 }
@@ -15,6 +16,7 @@ const chatSocket = new WebSocket(
     + '/'
     + color
     + '/'
+    + username
 );
 
 function set_fields_onclick (field, arr_i, arr) {
@@ -76,7 +78,6 @@ function place_kums() {
 // ## MAIN PART ##
 console.log(color)
 console.log(board_ind)
-document.querySelectorAll('[class="square"]').forEach(set_fields_onclick);
 set_kums();
 place_kums();
 
@@ -85,7 +86,7 @@ chatSocket.onmessage = function(e) {
     console.log(data.msgType);
     if (data.msgType == 'message') {
         document.querySelector('#chat-log').value += (
-            data.color
+            data.messageFrom
             + ':'
             + data.message
             + '\n'
@@ -108,6 +109,10 @@ chatSocket.onmessage = function(e) {
         let kumEnd = endField.getAttribute('kum')
         endField.setAttribute('kum', parseInt(kumStart) + parseInt(kumEnd));
         place_kums();
+    }
+    else if (data.msgType == 'opponent_joined') {
+        console.log('GAME HAS BEEN STARTED')
+        document.querySelectorAll('[class="square"]').forEach(set_fields_onclick);
     }
 };
 

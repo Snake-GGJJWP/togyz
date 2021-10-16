@@ -1,0 +1,19 @@
+body {
+  background: #efefef;
+  padding: 10px;
+  font-family: 'Varela Round';
+}
+
+#navbar span{
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+#logout {
+  display:inline;
+  min-width: 110px;
+  min-height: 30px;
+  width: 8.5%;
+  height: 80%;
+}

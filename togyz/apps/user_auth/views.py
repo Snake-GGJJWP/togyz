@@ -1,10 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
 from .forms import CreateUserForm
+from .decorators import if_logged, if_unlogged
 
-def registration(request):
+
+@if_logged
+def test(request, test):
+    return HttpResponse(f'Hello {test}')
+
+
+@if_unlogged
+def registration_page(request):
     form = CreateUserForm()
     print(request.method)
 
@@ -16,17 +24,18 @@ def registration(request):
             messages.success(request, f'Account has been created for {user}')
             return redirect('login')
         else:
-            messages.error(request, f'Something went wrong')
-
+            for field in form.errors:
+                messages.error(request, form.errors[field].as_text())
 
     return render(request, 'user_auth/registration.html', {'form': form})
 
 
-def login(request):
+@if_unlogged
+def login_page(request):
     if request.method == "POST":
         print(type(request))
-        username = request.get('lg_username')
-        password = request.get('lg_password')
+        username = request.POST.get('lg_username')
+        password = request.POST.get('lg_password')
 
         print(username, password)
         user = authenticate(request, username=username, password=password)
@@ -35,3 +44,9 @@ def login(request):
             return redirect('lobby')
 
     return render(request, 'user_auth/login.html')
+
+
+@if_logged
+def logout_user(request):
+    logout(request)
+    return redirect('login')
