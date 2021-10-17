@@ -62,6 +62,7 @@ def room(request, room_name):
         'you': you,
     })
 
+
 @if_logged
 def waiting_room(request):
     if request.method == "GET":
@@ -69,9 +70,9 @@ def waiting_room(request):
     print(request.POST)
     game_name = hexlify(request.user.username.encode('utf-8') + datetime.now().strftime("%m-%d-%Y-%H-%M-%S").encode('utf-8'))
     game_name = game_name.decode('utf-8')
-    player = User.objects.filter(username = request.user.username)[0]
+    player = User.objects.filter(username=request.user.username)[0]
     game = Game(name=game_name, history='', current_position='')
-    if request.POST['white']:
+    if request.POST.get('white'):
         game = Game(name=game_name, player_white=player.username, history='', current_position='')
     else:
         game = Game(name=game_name, player_black=player.username, history='', current_position='')

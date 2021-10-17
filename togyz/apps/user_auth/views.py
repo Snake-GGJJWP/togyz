@@ -42,6 +42,8 @@ def login_page(request):
         if user is not None:
             login(request, user)
             return redirect('lobby')
+        else:
+            messages.error(request, 'Incorrect username or password')
 
     return render(request, 'user_auth/login.html')
 
