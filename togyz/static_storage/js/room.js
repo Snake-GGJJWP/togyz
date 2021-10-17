@@ -19,6 +19,15 @@ const chatSocket = new WebSocket(
     + username
 );
 
+const gameSocket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/chatGame/'
+    + roomName
+    + '/'
+    + color
+);
+
 function set_fields_onclick (field, arr_i, arr) {
     let index = field.getAttribute('name');
     console.log(index);
@@ -26,17 +35,12 @@ function set_fields_onclick (field, arr_i, arr) {
         console.log(field);
         field.onclick = function(e) {
             if (parseInt(field.getAttribute('kum')) > 0) {
-                let field_i = parseInt(field.getAttribute('name'));
-                let kum = parseInt(field.getAttribute('kum'));
-                var endField = (field_i + kum)
-                while (endField > 18) {
-                    endField = endField%19 + Math.floor(endField/19);
-                }
-                chatSocket.send(JSON.stringify({
-                    'msgType': "move",
+                // let field_i = parseInt(field.getAttribute('name'));
+                gameSocket.send(JSON.stringify({
                     'message': color + "has made a move",
-                    'startField': field_i,
-                    'endField': endField
+                    'color': color,
+                    // 'startField': field_i,
+                    'startField': index
                 }))
             }
         };
@@ -52,9 +56,6 @@ function set_kums(){
 
 function place_kums() {
     place_kum = function(square, index, arr) {
-        /*console.log("setting kums for" + index.toString());
-        console.log(square);
-        console.log(square.getAttribute('kum'));*/
         square.textContent = '';
         let kum = square.getAttribute('kum');
         for (let i = 0; i < Math.min(9, parseInt(kum)); i++) {
@@ -76,8 +77,11 @@ function place_kums() {
 }
 
 // ## MAIN PART ##
-console.log(color)
-console.log(board_ind)
+console.log(color);
+console.log(board_ind);
+if (color != 'spec') {
+    document.querySelectorAll('[class="square"]').forEach(set_fields_onclick);
+}
 set_kums();
 place_kums();
 
@@ -92,7 +96,7 @@ chatSocket.onmessage = function(e) {
             + '\n'
         );
     }
-    else if (data.msgType == 'move') {
+    /*else if (data.msgType == 'move') {
         document.querySelector('#chat-log').value += (
             '[MOVE] '
             + data.color
@@ -113,11 +117,21 @@ chatSocket.onmessage = function(e) {
     else if (data.msgType == 'opponent_joined') {
         console.log('GAME HAS BEEN STARTED')
         document.querySelectorAll('[class="square"]').forEach(set_fields_onclick);
-    }
+    }*/
 };
 
 chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
+};
+
+gameSocket.onmessage = function (e) {
+    data = JSON.parse(e.data);
+    if (data.msgType == 'opponent_joined') {
+        console.log('GAME HAS BEEN STARTED');
+    }
+    else if (data.msgType == 'denied') {
+        console.log(data.comment);
+    }
 };
 
 document.querySelector('#chat-message-input').focus();
