@@ -1,0 +1,56 @@
+body {
+  background: #efefef;
+  font-family: 'Varela Round';
+}
+
+#navbar span{
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+#logout {
+  display:inline;
+  min-width: 110px;
+  min-height: 30px;
+  width: 8.5%;
+  height: 80%;
+}
+
+#game-form {
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+
+#radio-btn {
+  display: block;
+  margin: auto;
+  width: 400px;
+  padding-bottom: 4px;
+}
+
+#room-name-submit {
+  display: block;
+  margin: auto;
+  width: 400px;
+}
+
+form {
+  text-align: center;
+  margin-top: 300px;
+}
+
+nav {
+  height: 100px; 
+}
+
+nav a {
+  transform: scale(1.5);
+  padding-left: 20px
+}
+
+#logout-button {
+  transform: scale(1.5);
+  margin-left: -120px
+}

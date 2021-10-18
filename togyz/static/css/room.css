@@ -1,9 +1,48 @@
+#play-area {
+	margin-left: auto;
+	margin-right: auto;
+	width:800px;
+}
+
+#info {
+	display: none;
+}
+
+#board {
+	display: inline-block;
+	margin-left:10px;
+	margin-top:-30px;
+	
+}
+
+#chat {
+	display: inline-block;
+	width: 25%;
+	margin-left: -10%;
+}
+
+#chat-log {
+	display: inline-block;
+	resize: none;
+	width: 100%;
+}
+
+#chat-message-input {
+	display: inline-block;
+	width: 100%
+}
+
+#chat-message-submit {
+	display: none;
+}
+
 .square {
 	width: 50px;
-	height: 100px;
+	height: 125px;
 	background-color: #b3b3b3;
 	display: inline-block;
 	border: 1px solid black;
+	margin: 2px;
 }
 
 
@@ -13,4 +52,35 @@
 	border-radius: 50%;
 	display: block;
 	background-color: black;
+}
+
+.kum-up {
+	margin-top: 0px !important;
+}
+
+.square div {
+	display: inline-block;
+	width: 40%;
+	margin-top: -10px;
+}
+
+.kum_counter {
+	display: inline-block;
+	width: 50px;
+	height: 25px;
+	margin: 3px;
+}
+
+.your_counter p{
+	margin-left:auto;
+	margin-right:auto;
+	margin-top: auto;
+	width:40%;
+}
+
+.opponent_counter p{
+	margin-left:auto;
+	margin-right:auto;
+	margin-bottom: auto;
+	width:40%;
 }

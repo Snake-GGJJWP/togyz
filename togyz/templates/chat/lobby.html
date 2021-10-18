@@ -1,19 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <title>Chat Rooms</title>
     {% load static %}
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=450">
+    <title>Chat Rooms</title>
+    <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/lobby.css' %}">
 </head>
 <body>
-    What chat room would you like to enter?<br>
-    <input id="room-name-input" type="text" size="100"><br>
-    <div>
-        <input type="radio" id="white" name="color"> White
-        <input type="radio" id="black" name="color"> Black
-    </div>
-    <input id="room-name-submit" type="button" value="Enter">
-
+<div class="card shadow">
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <a class="navbar-brand">{{request.user}}</a>
+  <div class="form-inline">
+    <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
+    <button id="logout-button" class="btn btn-outline-danger my-2 my-sm-0">Logout</button>
+  </div>
+</nav>
+</div>
+    <form method="POST" action="{% url 'waiting_room' %}" id="game-form">
+        {% csrf_token %}
+        <!--What chat room would you like to enter?<br>
+        <input id="room-name-input" type="text" size="100"><br>
+        <div>
+            <input type="radio" id="white" name="white"> White
+            <input type="radio" id="black" name="black"> Black
+        </div>-->
+        <div id="radio-btn" class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-secondary btn-lg shadow active">
+            <input type="radio" name="white" id="option1" autocomplete="off" checked=""> White
+          </label>
+          <label class="btn btn-secondary btn-lg shadow">
+            <input type="radio" name="black" id="option2" autocomplete="off"> Black
+          </label>
+        </div>
+        <input id="room-name-submit" class="btn btn-primary btn-lg shadow" type="submit" value="Start Game">
+    </form>
     <script src="{% static 'js/lobby.js' %}"></script>
 </body>
 </html>
