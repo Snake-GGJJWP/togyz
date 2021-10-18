@@ -1,14 +1,14 @@
 Для того, чтобы запустить приложение сейчас необходимо следовать следующим инсрукциям:
-- Скачайте версию python 3.9.6 для вашей системы с официального сайта https://www.python.org/downloads/release/python-396/  (рекомендуется) или любую другую версию новее.
-- Установите python и добавьте python в переменную PATH (обязательно!!!) (https://www.istocks.club/%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-python-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-path-windows/2020-10-14/)
-	3. Скачайте библиотеку django 
-		a. Для Windows: пропишите в командной строке python -m pip install django(https://docs.djangoproject.com/en/1.8/howto/windows/)
-		b. Для MacOS: пропишите в терминале python3 -m pip install django
-		c. Для Linux (Ubuntu): пропишите в терминале pip3 install django
-		P.S. Если не можете установить, значит вы не установили pip (смотрите в гугле "как установить pip для <ваша система>")
-		P.P.S. Если не получается, смотрите в гугле по коду ошибки (если вы не разбираетесь в этом, попросите это сделать того, кто разбирается)
-	3.1. Убедитесь, что django работает корректно. Для этого пропишите django-admin --version в вашей командной строке или терминале. Если выведет что-то вроде этого, значит django установлен правильно.
-  ![image](https://user-images.githubusercontent.com/60911417/137697576-6079a83a-615a-4bab-b976-1d6ff6f1d063.png)
+1. Скачайте версию python 3.9.6 для вашей системы с официального сайта https://www.python.org/downloads/release/python-396/  (рекомендуется) или любую другую версию новее.
+1. Установите python и добавьте python в переменную PATH (обязательно!!!) (https://www.istocks.club/%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-python-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-path-windows/2020-10-14/)
+1. Скачайте библиотеку django 
+	- Для Windows: пропишите в командной строке python -m pip install django(https://docs.djangoproject.com/en/1.8/howto/windows/)
+	- Для MacOS: пропишите в терминале python3 -m pip install django
+	- Для Linux (Ubuntu): пропишите в терминале pip3 install django
+	- P.S. Если не можете установить, значит вы не установили pip (смотрите в гугле "как установить pip для <ваша система>")
+	- P.P.S. Если не получается, смотрите в гугле по коду ошибки (если вы не разбираетесь в этом, попросите это сделать того, кто разбирается)
+1.1. Убедитесь, что django работает корректно. Для этого пропишите django-admin --version в вашей командной строке или терминале. Если выведет что-то вроде этого, значит django установлен правильно.
+ ![image](https://user-images.githubusercontent.com/60911417/137697576-6079a83a-615a-4bab-b976-1d6ff6f1d063.png)
 
 	3.2. Ещё один способ убедиться в этом - запустить среду python в командной строке или терминале (https://www.datacamp.com/community/tutorials/running-a-python-script) и пропишите import django; django.__version__. Если получилось что-то вроде этого, значит django установлен правильно.
   ![image](https://user-images.githubusercontent.com/60911417/137697681-b3579bee-6907-4015-8ebf-fa5e0d30dcb9.png)
