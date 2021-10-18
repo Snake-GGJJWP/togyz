@@ -8,7 +8,7 @@
 	- **P.S.** Если не можете установить, значит вы не установили pip (смотрите в гугле "как установить pip для <ваша система>")
 	- **P.P.S.** Если не получается, смотрите в гугле по коду ошибки (если вы не разбираетесь в этом, попросите это сделать того, кто разбирается)
 	1. Убедитесь, что django работает корректно. Для этого пропишите django-admin --version в вашей командной строке или терминале. Если выведет что-то вроде этого, значит django установлен правильно.
- ![image](https://user-images.githubusercontent.com/60911417/137697576-6079a83a-615a-4bab-b976-1d6ff6f1d063.png)
+	* ![image](https://user-images.githubusercontent.com/60911417/137697576-6079a83a-615a-4bab-b976-1d6ff6f1d063.png)
 
 	1. Ещё один способ убедиться в этом - [запустить среду python в командной строке или терминале](https://www.datacamp.com/community/tutorials/running-a-python-script) и пропишите import django; django.__version__. Если получилось что-то вроде этого, значит django установлен правильно.
 ![image](https://user-images.githubusercontent.com/60911417/137697681-b3579bee-6907-4015-8ebf-fa5e0d30dcb9.png)
