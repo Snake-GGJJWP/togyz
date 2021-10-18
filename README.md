@@ -1,6 +1,6 @@
 Для того, чтобы запустить приложение сейчас необходимо следовать следующим инсрукциям:
-	1. Скачайте версию python 3.9.6 для вашей системы с официального сайта https://www.python.org/downloads/release/python-396/  (рекомендуется) или любую другую версию новее.
-	2. Установите python и добавьте python в переменную PATH (обязательно!!!) (https://www.istocks.club/%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-python-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-path-windows/2020-10-14/)
+	* Скачайте версию python 3.9.6 для вашей системы с официального сайта https://www.python.org/downloads/release/python-396/  (рекомендуется) или любую другую версию новее.
+	* Установите python и добавьте python в переменную PATH (обязательно!!!) (https://www.istocks.club/%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-python-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%83%D1%8E-path-windows/2020-10-14/)
 	3. Скачайте библиотеку django 
 		a. Для Windows: пропишите в командной строке python -m pip install django(https://docs.djangoproject.com/en/1.8/howto/windows/)
 		b. Для MacOS: пропишите в терминале python3 -m pip install django
