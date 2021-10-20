@@ -18,3 +18,9 @@ class Game(models.Model):
         if self.player_white and self.player_black:
             return True
         return False
+
+    class Meta():
+        ordering = ['-date']
+
+    def __str__(self):
+        return '{0} vs {1} | {2}'.format(self.player_white, self.player_black, self.date.strftime('%d.%m.%Y'))

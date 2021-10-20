@@ -12,7 +12,7 @@
             <img id="sphere" style="display: none" src="{% static 'img/sphere.png' %}" alt="">
             {{ room_name|json_script:"room-name" }}
             {{ color|json_script:"color" }}
-            {{ request.user.username|json_script:"username"}}
+            {{ request.user.username|json_script:"username" }}
         </div>
         <div id="chat">
             <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br>

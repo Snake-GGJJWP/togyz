@@ -73,9 +73,12 @@ def waiting_room(request):
     player = User.objects.filter(username=request.user.username)[0]
     game_start_position = '''{"1": 9, "2": 9, "3": 9, "4": 9, "5": 9, "6": 9, "7": 9, "8": 9, "9": 9, "10": 9, "11": 9, "12": 9, "13": 9, "14": 9, "15": 9, "16": 9, "17": 9, "18": 9, "white_pool": 0, "black_pool": 0}'''
     if request.POST.get('white'):
-        game = Game(name=game_name, player_white=player.username, is_finished=False, history='{}', current_position=game_start_position)
+        game = Game(name=game_name, player_white=player.username, is_finished=False, history='[]', current_position=game_start_position)
+    elif request.POST.get('black'):
+        game = Game(name=game_name, player_black=player.username, is_finished=False, history='[]', current_position=game_start_position)
     else:
-        game = Game(name=game_name, player_black=player.username, is_finished=False, history='{}', current_position=game_start_position)
+        messages.warning(request, "You sent incomplete game settings")
+        return redirect("lobby")
     game.save()
     game.players.add(player)
     print(game)

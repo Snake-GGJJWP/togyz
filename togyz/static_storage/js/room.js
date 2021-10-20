@@ -2,10 +2,10 @@ const roomName = JSON.parse(document.getElementById('room-name').textContent);
 const color = JSON.parse(document.getElementById('color').textContent);
 const username = JSON.parse(document.getElementById('username').textContent);
 if (color == "white") {
-    var board_ind = [1,2,3,4,5,6,7,8,9];
+    var board_ind = ['1','2','3','4','5','6','7','8','9'];
 }
 else if (color == "black") {
-    var board_ind = [10,11,12,13,14,15,16,17,18]
+    var board_ind = ['10','11','12','13','14','15','16','17','18'];
 }
 
 const chatSocket = new WebSocket(
@@ -13,10 +13,6 @@ const chatSocket = new WebSocket(
     + window.location.host
     + '/ws/chat/'
     + roomName
-    + '/'
-    + color
-    + '/'
-    + username
 );
 
 const gameSocket = new WebSocket(
@@ -24,28 +20,19 @@ const gameSocket = new WebSocket(
     + window.location.host
     + '/ws/chatGame/'
     + roomName
-    + '/'
-    + color
 );
 
 function set_fields_onclick (field, arr_i, arr) {
     let index = field.getAttribute('name');
-    console.log(index);
-    if (board_ind.includes(parseInt(index))) {
-        console.log(field);
+    if (board_ind.includes(index)) {
         field.onclick = function(e) {
-            if (parseInt(field.getAttribute('kum')) > 0) {
-                // let field_i = parseInt(field.getAttribute('name'));
-                gameSocket.send(JSON.stringify({
-                    'message': color + "has made a move",
-                    'color': color,
-                    // 'startField': field_i,
-                    'startField': index
-                }))
-            }
+            gameSocket.send(JSON.stringify({
+                'msg_type': 'move',
+                'startField': index
+            }))
         };
     }
-};
+}
 
 function set_kums(){
     for (let i = 1; i<=18; i++) {
@@ -74,6 +61,23 @@ function place_kums() {
     };
     console.log(document.querySelectorAll('[class="square"]')[0])
     document.querySelectorAll('[class="square"]').forEach(place_kum);
+}
+
+function place_kum_test(i, kum) {
+    let field = document.getElementById('field'+(i-1));
+    field.setAttribute('kum', kum);
+    field.textContent = '';
+    for (let i = 0; i < Math.min(9, parseInt(kum)); i++) {
+        let img = document.createElement('img');
+        let src = document.getElementById('sphere').getAttribute('src')
+        img.setAttribute('src', src);
+        var kum_obj = document.createElement('div');
+        if (i == 0){
+            kum_obj.setAttribute('class', 'kum-up');
+        }
+        kum_obj.appendChild(img);
+        field.appendChild(kum_obj);
+    }
 }
 
 // ## MAIN PART ##
@@ -131,6 +135,12 @@ gameSocket.onmessage = function (e) {
     }
     else if (data.msgType == 'denied') {
         console.log(data.comment);
+    }
+    else if (data.msgType == 'move') {
+        var position = data.current_position;
+        for (var key in position) {
+            place_kum_test(key, position[key])
+        }
     }
 };
 
