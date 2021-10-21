@@ -67,7 +67,7 @@ function place_kum_test(index, kum) {
     if (index == 'white_pool' || index == 'black_pool') {
         var field = document.getElementById(index);
         field.textContent = '';
-        for (let i = 0; i < Math.min(39, kum); i++) {
+        for (let i = 0; i < Math.min(27, kum); i++) {
             let img = document.createElement('img');
             let src = document.getElementById('sphere').getAttribute('src');
             img.src = src;
@@ -132,6 +132,8 @@ gameSocket.onmessage = function (e) {
         for (var key in position) {
             place_kum_test(key, position[key]);
         }
+
+        console.log(data.winner + " WON")
     }
 };
 

@@ -115,17 +115,44 @@ class GameConsumer(WebsocketConsumer):
             self.make_move(text_data['startField'])
 
     def make_move(self, start_field):
-        def update(current_position, history, color_turn):
-            self.send_to_group(msg_type='move', current_position=current_position)
+        def update(current_position, history, color_turn, winner):
+            print(f"{winner} WON")
+            self.send_to_group(msg_type='move', current_position=current_position, winner=winner)
             game.current_position = json.dumps(current_position)
             game.history = json.dumps(history)
             game.color_turn = color_turn
+            if winner:
+                game.winner = winner
+                game.is_finished = True
             game.save()
+
+        def define_winner(current_position, white, black):
+            if current_position['white_pool'] > current_position['black_pool']:
+                return white
+            elif current_position['white_pool'] < current_position['black_pool']:
+                return black
+            else:
+                return "draw"
+
+        def get_winner(game, board_ind, current_position):
+            winner = None
+            if self.color == 'white' and sum([current_position[str(i)] for i in board_ind['black']]) == 0:
+                current_position['white_pool'] += sum([current_position[str(i)] for i in board_ind['white']])
+                winner = define_winner(current_position, white=game.player_white, black=game.player_black)
+                current_position = {str(i): 0 for i in range(1, 18)} | {'white_pool': current_position['white_pool'], 'black_pool': current_position['black_pool']}
+            elif self.color == 'black' and sum([current_position[str(i)] for i in board_ind['white']]) == 0:
+                current_position['black_pool'] += sum([current_position[str(i)] for i in board_ind['black']])
+                winner = define_winner(current_position, white=game.player_white, black=game.player_black)
+                current_position = {str(i): 0 for i in range(1, 18)} | {'white_pool': current_position['white_pool'], 'black_pool': current_position['black_pool']}
+            return winner, current_position
 
         game = Game.objects.filter(name=self.room_name)[0]
         history = json.loads(game.history)
         current_position = json.loads(game.current_position)
         color_turn = game.color_turn
+
+        if game.is_finished:
+            self.send_back(msg_type='denied', comment='Game has been finished already')
 
         board_ind = {'white': list(map(str, range(1, 10))), 'black': list(map(str, range(10, 19)))}
 
@@ -162,7 +189,8 @@ class GameConsumer(WebsocketConsumer):
                 current_position['white_pool'] += 1
             else:
                 current_position[str(int(start_field) + 1)] += 1
-            update(current_position, history, color_turn)
+            winner, current_position = get_winner(game, board_ind, current_position)
+            update(current_position, history, color_turn, winner)
             return
 
         current_position[start_field] = 0
@@ -187,22 +215,15 @@ class GameConsumer(WebsocketConsumer):
 
         history.append(f'{start_field} - {i}')
 
-        """if self.color == 'white':
-            check = board_ind['black']
-        else:
-            check = board_ind['white']
+        winner, current_position = get_winner(game, board_ind, current_position)
 
-        for i in check:
-            if current_position[str(i)] == 0:
-                game.is_finished = True """
-
-        update(current_position, history, color_turn)
+        update(current_position, history, color_turn, winner)
 
     def chat_message(self, event):
         msg_type = event['msg_type']
 
         if (msg_type == 'move'):
-            self.send_back(msg_type=msg_type, current_position=event['current_position'])
+            self.send_back(msg_type=msg_type, current_position=event['current_position'], winner=event['winner'])
 
         # When player's opponent joined (it can't be seen by anyone except this player)
         if (msg_type == 'opponent_joined') and (self.color != event['color']) and (event['color'] != 'spec') and (self.color != 'spec'):

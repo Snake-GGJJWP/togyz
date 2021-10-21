@@ -37,7 +37,7 @@ function set_fields_onclick (field, arr_i, arr) {
 function set_kums(){
     for (let i = 1; i<=18; i++) {
         let field = document.getElementById("field"+i);
-        field.setAttribute('kum', 9);
+        field.setAttribute('kum', 1);
     }
 }
 
@@ -89,6 +89,7 @@ function place_kum_test(index, kum) {
             field.appendChild(kum_obj);
         }
     }
+    console.log(index)
     document.getElementById('counter_'+index).innerHTML = kum; 
 }
 
@@ -130,6 +131,9 @@ gameSocket.onmessage = function (e) {
         var position = data.current_position;
         for (var key in position) {
             place_kum_test(key, position[key]);
+        }
+        if (data.winner) {
+            console.log(data.winner + " WON")
         }
     }
 };

@@ -35,15 +35,27 @@
             </tr>
 
             <tr>
+                {% if color == 'white' %}
                 <td class="counter-wrapper">
                     <span id="counter_black_pool">0</span>
                 </td>
-                <td id="{% if color == 'white' %}black_pool{% else %}white_pool{% endif %}" class="square pool"></td>
-            </tr>
-            <tr>
+                {% else %}
                 <td class="counter-wrapper">
                     <span id="counter_white_pool">0</span>
                 </td>
+                {% endif %}
+                <td id="{% if color == 'white' %}black_pool{% else %}white_pool{% endif %}" class="square pool"></td>
+            </tr>
+            <tr>
+                {% if color == 'white' %}
+                <td class="counter-wrapper">
+                    <span id="counter_white_pool">0</span>
+                </td>
+                {% else %}
+                <td class="counter-wrapper">
+                    <span id="counter_black_pool">0</span>
+                </td>
+                {% endif %}
                 <td id="{% if color == 'white' %}white_pool{% else %}black_pool{% endif %}" class="square pool"></td>
             </tr>
 
