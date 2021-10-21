@@ -2,6 +2,8 @@
 	margin-left: auto;
 	margin-right: auto;
 	width:800px;
+	text-align: center;
+	display:table;
 }
 
 #info {
@@ -11,25 +13,23 @@
 #board {
 	display: inline-block;
 	margin-left:10px;
-	margin-top:-30px;
-	
 }
 
 #chat {
-	display: inline-block;
+	display: table-cell;
 	width: 25%;
-	margin-left: -10%;
+	vertical-align: middle;
 }
 
 #chat-log {
-	display: inline-block;
 	resize: none;
-	width: 100%;
+	width: 90%;
+	margin: auto;
 }
 
 #chat-message-input {
 	display: inline-block;
-	width: 100%
+	width: 90%
 }
 
 #chat-message-submit {
@@ -43,8 +43,25 @@
 	display: inline-block;
 	border: 1px solid black;
 	margin: 2px;
+	text-align: left;
 }
 
+.pool {
+	width: 90%;
+	height: 40px;
+}
+
+.pool img{
+	margin-right: -8px;
+}
+
+.up-pool {
+	padding-bottom: 15px;
+}
+
+.bottom-pool {
+	padding-top: 15px;
+}
 
 .kum {
 	width: 50%;
@@ -67,20 +84,19 @@
 .kum_counter {
 	display: inline-block;
 	width: 50px;
-	height: 25px;
-	margin: 3px;
+	border: 1px solid black;
+	margin: 2px;
 }
 
-.your_counter p{
-	margin-left:auto;
-	margin-right:auto;
-	margin-top: auto;
-	width:40%;
+.counter-wrapper {
+	width: 7%;
+	height: 40px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	border: 1px solid black;
+	display: inline-block;
 }
 
-.opponent_counter p{
-	margin-left:auto;
-	margin-right:auto;
-	margin-bottom: auto;
-	width:40%;
+.counter-wrapper span {
+	line-height: 40px;
 }

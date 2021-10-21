@@ -57,27 +57,39 @@ function place_kums() {
             square.appendChild(kum_obj);
         };
         let i = square.getAttribute('name') 
-        document.getElementById('counter'+i).innerHTML = kum; 
+        document.getElementById('counter_'+i).innerHTML = kum; 
     };
     console.log(document.querySelectorAll('[class="square"]')[0])
     document.querySelectorAll('[class="square"]').forEach(place_kum);
 }
 
-function place_kum_test(i, kum) {
-    let field = document.getElementById('field'+(i-1));
-    field.setAttribute('kum', kum);
-    field.textContent = '';
-    for (let i = 0; i < Math.min(9, parseInt(kum)); i++) {
-        let img = document.createElement('img');
-        let src = document.getElementById('sphere').getAttribute('src')
-        img.setAttribute('src', src);
-        var kum_obj = document.createElement('div');
-        if (i == 0){
-            kum_obj.setAttribute('class', 'kum-up');
+function place_kum_test(index, kum) {
+    if (index == 'white_pool' || index == 'black_pool') {
+        var field = document.getElementById(index);
+        field.textContent = '';
+        for (let i = 0; i < Math.min(39, kum); i++) {
+            let img = document.createElement('img');
+            let src = document.getElementById('sphere').getAttribute('src');
+            img.src = src;
+            img.setAttribute('class',  (i % 2 == 0) ? 'up-pool' : 'bottom-pool');
+            field.appendChild(img);
         }
-        kum_obj.appendChild(img);
-        field.appendChild(kum_obj);
     }
+    else {
+        let field = document.getElementById('field'+index);
+        field.setAttribute('kum', kum);
+        field.textContent = '';
+        for (let i = 0; i < Math.min(12, parseInt(kum)); i++) {
+            let img = document.createElement('img');
+            let src = document.getElementById('sphere').getAttribute('src');
+            img.src = src;
+            let kum_obj = document.createElement('div');
+            kum_obj.setAttribute('class', (i == 0) ? 'kum-up' : '');
+            kum_obj.appendChild(img);
+            field.appendChild(kum_obj);
+        }
+    }
+    document.getElementById('counter_'+index).innerHTML = kum; 
 }
 
 // ## MAIN PART ##
@@ -100,28 +112,6 @@ chatSocket.onmessage = function(e) {
             + '\n'
         );
     }
-    /*else if (data.msgType == 'move') {
-        document.querySelector('#chat-log').value += (
-            '[MOVE] '
-            + data.color
-            + ' moved from '
-            + data.startField
-            + ' to '
-            + data.endField
-            + '\n'
-        );
-        let startField = document.getElementById('field' + data.startField.toString());
-        let endField = document.getElementById('field' + data.endField.toString());
-        let kumStart = startField.getAttribute('kum');
-        startField.setAttribute('kum', '0');
-        let kumEnd = endField.getAttribute('kum')
-        endField.setAttribute('kum', parseInt(kumStart) + parseInt(kumEnd));
-        place_kums();
-    }
-    else if (data.msgType == 'opponent_joined') {
-        console.log('GAME HAS BEEN STARTED')
-        document.querySelectorAll('[class="square"]').forEach(set_fields_onclick);
-    }*/
 };
 
 chatSocket.onclose = function(e) {
@@ -139,7 +129,7 @@ gameSocket.onmessage = function (e) {
     else if (data.msgType == 'move') {
         var position = data.current_position;
         for (var key in position) {
-            place_kum_test(key, position[key])
+            place_kum_test(key, position[key]);
         }
     }
 };

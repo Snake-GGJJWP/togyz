@@ -116,7 +116,7 @@ class GameConsumer(WebsocketConsumer):
 
     def make_move(self, start_field):
         def update(current_position, history, color_turn):
-            # self.send_to_group(msg_type='move', current_position=self.current_position)
+            self.send_to_group(msg_type='move', current_position=current_position)
             game.current_position = json.dumps(current_position)
             game.history = json.dumps(history)
             game.color_turn = color_turn
@@ -186,6 +186,15 @@ class GameConsumer(WebsocketConsumer):
             current_position[str(i)] = 0
 
         history.append(f'{start_field} - {i}')
+
+        """if self.color == 'white':
+            check = board_ind['black']
+        else:
+            check = board_ind['white']
+
+        for i in check:
+            if current_position[str(i)] == 0:
+                game.is_finished = True """
 
         update(current_position, history, color_turn)
 

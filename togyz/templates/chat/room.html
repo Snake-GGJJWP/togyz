@@ -22,8 +22,8 @@
         <table id="board">
             <tr>
                 {% for i in opponent %}
-                    <td class="kum_counter opponent_counter">
-                        <p id="counter{{i}}" name="{{i}}">{{i}}</p>
+                    <td class="kum_counter">
+                        <span id="counter_{{i}}" name="{{i}}">{{i}}</span>
                     </td>
                 {% endfor %}
             </tr>
@@ -34,6 +34,19 @@
                 {% endfor %}
             </tr>
 
+            <tr>
+                <td class="counter-wrapper">
+                    <span id="counter_black_pool">0</span>
+                </td>
+                <td id="{% if color == 'white' %}black_pool{% else %}white_pool{% endif %}" class="square pool"></td>
+            </tr>
+            <tr>
+                <td class="counter-wrapper">
+                    <span id="counter_white_pool">0</span>
+                </td>
+                <td id="{% if color == 'white' %}white_pool{% else %}black_pool{% endif %}" class="square pool"></td>
+            </tr>
+
             <tr id="you">
                 {% for i in you%}
                     <td id="field{{i}}" class="square" kum="0" name="{{i}}">
@@ -41,10 +54,10 @@
                 {% endfor %}
             </tr>
 
-            <tr>
+            <tr class="your-counters">
                 {% for i in you %}
                     <td class="kum_counter your_counter">
-                        <p id="counter{{i}}" name="{{i}}">{{i}}</p>
+                        <span id="counter_{{i}}" name="{{i}}">{{i}}</span>
                     </td>
                 {% endfor %}
             </tr>
@@ -52,35 +65,6 @@
             
         </table>    
     </div>
-
-    <!--<table id="board">
-        <tr id="">
-            <td id="field1" class="square" name="1">
-                <div><img src="https://img.icons8.com/fluency/25/000000/sphere.png"/></div>
-                <div><img src="https://img.icons8.com/fluency/25/000000/sphere.png"/></div>
-            </td>
-            <td id="field2" class="square" name="2"></td>
-            <td id="field3" class="square" name="3"></td>
-            <td id="field4" class="square" name="4"></td>
-            <td id="field5" class="square" name="5"></td>
-            <td id="field6" class="square" name="6"></td>
-            <td id="field7" class="square" name="7"></td>
-            <td id="field8" class="square" name="8"></td>
-            <td id="field9" class="square" name="9"></td>
-        </tr>
-        <tr id="">
-            <td id="field1" class="square" name="1"></td>
-            <td id="field2" class="square" name="2"></td>
-            <td id="field3" class="square" name="3"></td>
-            <td id="field4" class="square" name="4"></td>
-            <td id="field5" class="square" name="5"></td>
-            <td id="field6" class="square" name="6"></td>
-            <td id="field7" class="square" name="7"></td>
-            <td id="field8" class="square" name="8"></td>
-            <td id="field9" class="square" name="9"></td>
-        </tr>
-    </table>-->
-
     <script src="{% static 'js/room.js' %}"></script>
 </body>
 </html>
