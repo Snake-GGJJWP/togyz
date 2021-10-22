@@ -27,9 +27,9 @@
 	* ![image](https://user-images.githubusercontent.com/60911417/137697901-090d82cc-35b5-4610-b7d7-5d2fc2e7f893.png)
 
 1. Скачать библиотеку channels_redis
-		a. Для Windows: прописать в командной строке python -m pip install channels_redis
-		b. Для MacOS: прописать в терминале python3 -m pip install channels_redis
-		c. Для Linux (Ubuntu): прописать в терминале pip3 install channels_redis
+		- Для Windows: прописать в командной строке python -m pip install channels_redis
+		- Для MacOS: прописать в терминале python3 -m pip install channels_redis
+		- Для Linux (Ubuntu): прописать в терминале pip3 install channels_redis
 	1. Убедитесь, что channels_redis работает правильно. Для этого запустите среду python в командной строке или терминале (как в пункте 3.2) и пропишите import channels_redis; channels_redis.__version__ . Если получилось что-то вроде этого, то channels_redis установлен правильно.
 	* ![image](https://user-images.githubusercontent.com/60911417/137698006-e246ee5f-c0b7-41d5-9718-32c586b1c9e2.png)
 
