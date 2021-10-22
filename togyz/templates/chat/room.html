@@ -10,6 +10,7 @@
     <div id="play-area">
         <div id="info">
             <img id="sphere" style="display: none" src="{% static 'img/sphere.png' %}" alt="">
+            <img id="red-sphere" style="display: none" src="{% static 'img/red_sphere.png' %}" alt="">
             {{ room_name|json_script:"room-name" }}
             {{ color|json_script:"color" }}
             {{ request.user.username|json_script:"username" }}

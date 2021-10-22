@@ -64,6 +64,15 @@ function place_kums() {
 }
 
 function place_kum_test(index, kum) {
+    if (kum == 'X') {
+        var sphere = 'red-sphere';
+        kum = 1;
+        document.getElementById('counter_'+index).innerHTML = 0;
+    }
+    else {
+        var sphere = 'sphere';
+        document.getElementById('counter_'+index).innerHTML = kum;
+    }
     if (index == 'white_pool' || index == 'black_pool') {
         var field = document.getElementById(index);
         field.textContent = '';
@@ -81,7 +90,7 @@ function place_kum_test(index, kum) {
         field.textContent = '';
         for (let i = 0; i < Math.min(12, parseInt(kum)); i++) {
             let img = document.createElement('img');
-            let src = document.getElementById('sphere').getAttribute('src');
+            let src = document.getElementById(sphere).getAttribute('src');
             img.src = src;
             let kum_obj = document.createElement('div');
             kum_obj.setAttribute('class', (i == 0) ? 'kum-up' : '');
@@ -89,8 +98,7 @@ function place_kum_test(index, kum) {
             field.appendChild(kum_obj);
         }
     }
-    console.log(index)
-    document.getElementById('counter_'+index).innerHTML = kum; 
+    console.log(index) 
 }
 
 // ## MAIN PART ##
@@ -99,8 +107,8 @@ console.log(board_ind);
 if (color != 'spec') {
     document.querySelectorAll('[class="square"]').forEach(set_fields_onclick);
 }
-set_kums();
-place_kums();
+// set_kums();
+// place_kums();
 
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
@@ -132,8 +140,9 @@ gameSocket.onmessage = function (e) {
         for (var key in position) {
             place_kum_test(key, position[key]);
         }
-
-        console.log(data.winner + " WON")
+        if (data.winner) {
+            console.log(data.winner + " WON")
+        }
     }
 };
 

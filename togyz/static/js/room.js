@@ -37,7 +37,7 @@ function set_fields_onclick (field, arr_i, arr) {
 function set_kums(){
     for (let i = 1; i<=18; i++) {
         let field = document.getElementById("field"+i);
-        field.setAttribute('kum', 1);
+        field.setAttribute('kum', 9);
     }
 }
 
@@ -67,7 +67,7 @@ function place_kum_test(index, kum) {
     if (index == 'white_pool' || index == 'black_pool') {
         var field = document.getElementById(index);
         field.textContent = '';
-        for (let i = 0; i < Math.min(39, kum); i++) {
+        for (let i = 0; i < Math.min(27, kum); i++) {
             let img = document.createElement('img');
             let src = document.getElementById('sphere').getAttribute('src');
             img.src = src;
@@ -79,9 +79,16 @@ function place_kum_test(index, kum) {
         let field = document.getElementById('field'+index);
         field.setAttribute('kum', kum);
         field.textContent = '';
+        if (kum == 'X') {
+            var sphere = 'red_sphere';
+            kum = 1;
+        }
+        else  {
+            var sphere = 'sphere'
+        }
         for (let i = 0; i < Math.min(12, parseInt(kum)); i++) {
             let img = document.createElement('img');
-            let src = document.getElementById('sphere').getAttribute('src');
+            let src = document.getElementById(sphere).getAttribute('src');
             img.src = src;
             let kum_obj = document.createElement('div');
             kum_obj.setAttribute('class', (i == 0) ? 'kum-up' : '');
@@ -132,9 +139,8 @@ gameSocket.onmessage = function (e) {
         for (var key in position) {
             place_kum_test(key, position[key]);
         }
-        if (data.winner) {
-            console.log(data.winner + " WON")
-        }
+
+        console.log(data.winner + " WON")
     }
 };
 

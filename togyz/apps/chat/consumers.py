@@ -75,7 +75,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 class GameConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.started = Game.objects.filter(name=self.room_name)[0].is_started
         self.user = self.scope['user']
 
         self.room_group_name = 'game_%s' % self.room_name
@@ -94,7 +93,17 @@ class GameConsumer(WebsocketConsumer):
         else:
             self.color = 'spec'
 
+        self.started = game.is_started
+        self.red_sphere = False
+        current_position = json.loads(game.current_position)
+        if self.color == 'white' and sum([1 for i in range(1, 10) if current_position[str(i)] == 'X']):
+            self.red_sphere = True
+        elif self.color == 'black' and sum([1 for i in range(10, 19) if current_position[str(i)] == 'X']):
+            self.red_sphere = True
+
         self.accept()
+
+        self.send_back(msg_type='move', current_position=current_position, winner=game.winner)
 
         if self.color != 'spec':
             self.send_to_group(msg_type='opponent_joined', color=self.color)
@@ -136,14 +145,24 @@ class GameConsumer(WebsocketConsumer):
 
         def get_winner(game, board_ind, current_position):
             winner = None
-            if self.color == 'white' and sum([current_position[str(i)] for i in board_ind['black']]) == 0:
-                current_position['white_pool'] += sum([current_position[str(i)] for i in board_ind['white']])
+
+            # Total amount of kums in white and black fields.
+            # Basically counts all values in current_position indexes of which
+            # corresponds to given color.
+            # NOTE: there may be string value such as 'X' in current_position
+            # so we must ensure we don't count them
+            white_total = sum([current_position[str(i)] for i in board_ind['white'] if current_position[str(i)] != 'X'])
+            black_total = sum([current_position[str(i)] for i in board_ind['black'] if current_position[str(i)] != 'X'])
+
+            end_point_position = {str(i): 0 for i in range(1, 18)} | {'white_pool': current_position['white_pool'], 'black_pool': current_position['black_pool']}
+            if self.color == 'white' and black_total == 0:
+                current_position['white_pool'] += white_total
                 winner = define_winner(current_position, white=game.player_white, black=game.player_black)
-                current_position = {str(i): 0 for i in range(1, 18)} | {'white_pool': current_position['white_pool'], 'black_pool': current_position['black_pool']}
-            elif self.color == 'black' and sum([current_position[str(i)] for i in board_ind['white']]) == 0:
-                current_position['black_pool'] += sum([current_position[str(i)] for i in board_ind['black']])
+                current_position = end_point_position
+            elif self.color == 'black' and white_total == 0:
+                current_position['black_pool'] += black_total
                 winner = define_winner(current_position, white=game.player_white, black=game.player_black)
-                current_position = {str(i): 0 for i in range(1, 18)} | {'white_pool': current_position['white_pool'], 'black_pool': current_position['black_pool']}
+                current_position = end_point_position
             return winner, current_position
 
         game = Game.objects.filter(name=self.room_name)[0]
@@ -172,7 +191,7 @@ class GameConsumer(WebsocketConsumer):
         if kum is None:
             self.send_back(msg_type='denied', comment='Couldn\'t find a field with such index')
             return
-        elif kum == 0:
+        elif kum == 0 or kum == 'X':
             self.send_back(msg_type='denied', comment='Illegal move')
             return
 
@@ -183,9 +202,9 @@ class GameConsumer(WebsocketConsumer):
 
         if kum == 1:
             current_position[start_field] = 0
-            if start_field == '18':
+            if start_field == '18' or (current_position[str(int(start_field) + 1)] == 'X' and self.color == 'white'):
                 current_position['black_pool'] += 1
-            elif start_field == '9':
+            elif start_field == '9' or (current_position[str(int(start_field) + 1)] == 'X' and self.color == 'black'):
                 current_position['white_pool'] += 1
             else:
                 current_position[str(int(start_field) + 1)] += 1
@@ -199,6 +218,13 @@ class GameConsumer(WebsocketConsumer):
         indexes = cycle(list(range(int(start_field), 19)) + list(range(1, int(start_field))))
         while j < kum:
             i = indexes.__next__()
+            if current_position[str(i)] == "X":
+                if str(i) in board_ind['white']:
+                    current_position['black_pool'] += 1
+                else:
+                    current_position['white_pool'] += 1
+                j += 1
+                continue
             current_position[str(i)] += 1
             j += 1
             if self.color == 'white' and i == 9 and j < kum:
@@ -209,9 +235,14 @@ class GameConsumer(WebsocketConsumer):
                 j += 1
         print(i)
         print(board_ind.get(self.color))
-        if str(i) not in board_ind.get(self.color) and current_position[str(i)] % 2 == 0:
-            current_position[f'{self.color}_pool'] += current_position[str(i)]
-            current_position[str(i)] = 0
+        if str(i) not in board_ind.get(self.color) and current_position[str(i)] != 'X':
+            if current_position[str(i)] % 2 == 0:
+                current_position[f'{self.color}_pool'] += current_position[str(i)]
+                current_position[str(i)] = 0
+            elif current_position[str(i)] == 3 and i not in {1, 10} and current_position[str((i - 9) % 18)] != "X" and not self.red_sphere:
+                current_position[f'{self.color}_pool'] += current_position[str(i)]
+                current_position[str(i)] = 'X'
+                self.red_sphere = True
 
         history.append(f'{start_field} - {i}')
 
