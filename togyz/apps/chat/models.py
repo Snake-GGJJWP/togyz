@@ -21,6 +21,26 @@ class Game(models.Model):
             return True
         return False
 
+    @property
+    def winner_color(self):
+        if self.winner == self.player_white:
+            return 'white'
+        elif self.winner == self.player_black:
+            return 'black'
+        else:
+            return None
+
+    def as_dict(self):
+        return {
+            'player_white': self.player_white,
+            'player_black': self.player_black,
+            'winner': self.winner,
+            'winner_color': self.winner_color,
+            'is_started': self.is_started,
+            'is_finished': self.is_finished,
+            'color_turn': self.color_turn
+        }
+
     class Meta():
         ordering = ['-date']
 

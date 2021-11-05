@@ -1,6 +1,11 @@
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 const color = JSON.parse(document.getElementById('color').textContent);
 const username = JSON.parse(document.getElementById('username').textContent);
+
+const colorOppose = {
+    'white': 'black',
+    'black': 'white'
+};
 if (color == "white") {
     var board_ind = ['1','2','3','4','5','6','7','8','9'];
 }
@@ -127,10 +132,105 @@ chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
 };
 
+function put_colors_on_usernames(data) {
+    if (!data.is_started) {
+        document.getElementById('white-player').style['color'] = 'black';
+        document.getElementById('black-player').style['color'] = 'black';
+    }
+    else if (!data.is_finished){
+        document.getElementById(data.color_turn+'-player').style['color'] = 'green';
+        document.getElementById(colorOppose[data.color_turn]+'-player').style['color'] = 'red';
+    }
+}
+
+function on_connect(data) {
+    user_joined({
+        username: data.player_white,
+        color: 'white',
+    });
+    user_joined({
+        username: data.player_black,
+        color: 'black',
+    });
+    move({
+        current_position: data.current_position,
+        winner: data.winner,
+        color_turn: data.color_turn,
+        is_started: data.is_started,
+        winner_color: data.winner_color
+    });
+}
+
+function user_joined(data) {
+    if (data.username) {
+        document.getElementById('chat-log').value += (
+            '[ACTION]: ' 
+            + data.username
+            + ' has just joined the room!'
+            + '\n'
+        );
+    }
+    if (data.color != 'spec') {
+        document.getElementById(data.color + '-player').textContent = data.username;
+    }
+    if (data.is_started) {
+        console.log('GAME HAS BEEN STARTED');
+    }
+    put_colors_on_usernames({
+        'is_started': data.is_started,
+        'color_turn': data.color_turn
+    });
+}
+
+function denied(data) {
+    console.log(data.comment);
+}
+
+function move(data) {
+    var position = data.current_position;
+    for (var key in position) {
+        place_kum_test(key, position[key]);
+    }
+    if (data.winner) {
+        console.log(data.winner + " WON");
+        console.log(data.winner_color);
+        document.getElementById(data.winner_color + '-player').style['color'] = 'gold';
+        document.getElementById(colorOppose[data.winner_color]+ '-player').style['color'] = 'black';
+        return
+    }
+    document.getElementById(data.color_turn+'-player').style['color'] = 'green';
+    document.getElementById(colorOppose[data.color_turn]+'-player').style['color'] = 'red';
+}
+
+const onmessageFunctionsBank = {
+    'on_connect': on_connect,
+    'user_joined': user_joined,
+    'denied': denied,
+    'move': move
+} 
+
 gameSocket.onmessage = function (e) {
     data = JSON.parse(e.data);
-    if (data.msgType == 'opponent_joined') {
-        console.log('GAME HAS BEEN STARTED');
+    onmessageFunctionsBank[data.msgType](data);
+    /*if (data.msgType == 'on_connect') {
+        var position = data.current_position;
+        for (var key in position) {
+            place_kum_test(key, position[key]);
+        }
+        document.getElementById()
+    }
+    if (data.msgType == 'user_joined') {
+        document.getElementById('chat-log').value = (
+            '[ACTION]: ' 
+            + data.username
+            + ' has just joined the room!'
+        );
+        if (data.color != 'spec') {
+            document.getElementById(data.color + '-player').textContent = data.username;
+        }
+        if (data.is_started) {
+            console.log('GAME HAS BEEN STARTED');
+        }
     }
     else if (data.msgType == 'denied') {
         console.log(data.comment);
@@ -143,7 +243,7 @@ gameSocket.onmessage = function (e) {
         if (data.winner) {
             console.log(data.winner + " WON")
         }
-    }
+    }*/
 };
 
 document.querySelector('#chat-message-input').focus();

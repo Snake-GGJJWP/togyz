@@ -5,6 +5,7 @@
     <title>Chat Room</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/room.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <div id="play-area">
@@ -76,7 +77,15 @@
             </tr>
 
             
-        </table>    
+        </table>
+        <table id="users">
+            <tr class="top-player">
+                <td><p id="{% if color == 'white' %}black-player{% else %}white-player{% endif %}"></p></td>
+            </tr>
+            <tr class="bottom-player">
+                <td><p id="{% if color == 'white' %}white-player{% else %}black-player{% endif %}"></p></td>
+            </tr>
+        </table>   
     </div>
     <script src="{% static 'js/room.js' %}"></script>
 </body>

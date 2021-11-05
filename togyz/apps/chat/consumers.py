@@ -100,13 +100,25 @@ class GameConsumer(WebsocketConsumer):
             self.red_sphere = True
         elif self.color == 'black' and sum([1 for i in range(10, 19) if current_position[str(i)] == 'X']):
             self.red_sphere = True
+        self.board_ind = {'white': list(map(str, range(1, 10))), 'black': list(map(str, range(10, 19)))}
 
         self.accept()
 
-        self.send_back(msg_type='move', current_position=current_position, winner=game.winner)
+        print(game.as_dict())
 
-        if self.color != 'spec':
-            self.send_to_group(msg_type='opponent_joined', color=self.color)
+        self.send_back(
+            msg_type='on_connect',
+            current_position=current_position,
+            **game.as_dict()
+        )
+
+        self.send_to_group(
+            msg_type='user_joined',
+            color=self.color,
+            username=self.user.username,
+            is_started=game.is_started,
+            color_turn=game.color_turn
+        )
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -125,8 +137,6 @@ class GameConsumer(WebsocketConsumer):
 
     def make_move(self, start_field):
         def update(current_position, history, color_turn, winner):
-            print(f"{winner} WON")
-            self.send_to_group(msg_type='move', current_position=current_position, winner=winner)
             game.current_position = json.dumps(current_position)
             game.history = json.dumps(history)
             game.color_turn = color_turn
@@ -134,6 +144,14 @@ class GameConsumer(WebsocketConsumer):
                 game.winner = winner
                 game.is_finished = True
             game.save()
+            winner_color = game.winner_color
+            self.send_to_group(
+                msg_type='move',
+                current_position=current_position,
+                winner=winner,
+                winner_color=winner_color,
+                color_turn=color_turn
+            )
 
         def define_winner(current_position, white, black):
             if current_position['white_pool'] > current_position['black_pool']:
@@ -143,7 +161,7 @@ class GameConsumer(WebsocketConsumer):
             else:
                 return "draw"
 
-        def get_winner(game, board_ind, current_position):
+        def get_winner(game, current_position):
             winner = None
 
             # Total amount of kums in white and black fields.
@@ -151,10 +169,10 @@ class GameConsumer(WebsocketConsumer):
             # corresponds to given color.
             # NOTE: there may be string value such as 'X' in current_position
             # so we must ensure we don't count them
-            white_total = sum([current_position[str(i)] for i in board_ind['white'] if current_position[str(i)] != 'X'])
-            black_total = sum([current_position[str(i)] for i in board_ind['black'] if current_position[str(i)] != 'X'])
+            white_total = sum([current_position[str(i)] for i in self.board_ind['white'] if current_position[str(i)] != 'X'])
+            black_total = sum([current_position[str(i)] for i in self.board_ind['black'] if current_position[str(i)] != 'X'])
 
-            end_point_position = {str(i): 0 for i in range(1, 18)} | {'white_pool': current_position['white_pool'], 'black_pool': current_position['black_pool']}
+            end_point_position = {str(i): 0 for i in range(1, 19)} | {'white_pool': current_position['white_pool'], 'black_pool': current_position['black_pool']}
             if self.color == 'white' and black_total == 0:
                 current_position['white_pool'] += white_total
                 winner = define_winner(current_position, white=game.player_white, black=game.player_black)
@@ -172,12 +190,11 @@ class GameConsumer(WebsocketConsumer):
 
         if game.is_finished:
             self.send_back(msg_type='denied', comment='Game has been finished already')
-
-        board_ind = {'white': list(map(str, range(1, 10))), 'black': list(map(str, range(10, 19)))}
+            return
 
         # if signal was sent from a spectator
         # or field index doesn't match allowed field indexes for this color
-        if not board_ind.get(self.color) or start_field not in board_ind.get(self.color):
+        if not self.board_ind.get(self.color) or start_field not in self.board_ind.get(self.color):
             self.send_back(msg_type='denied', comment='Illegal move')
             return
 
@@ -208,7 +225,7 @@ class GameConsumer(WebsocketConsumer):
                 current_position['white_pool'] += 1
             else:
                 current_position[str(int(start_field) + 1)] += 1
-            winner, current_position = get_winner(game, board_ind, current_position)
+            winner, current_position = get_winner(game, current_position)
             update(current_position, history, color_turn, winner)
             return
 
@@ -219,7 +236,7 @@ class GameConsumer(WebsocketConsumer):
         while j < kum:
             i = indexes.__next__()
             if current_position[str(i)] == "X":
-                if str(i) in board_ind['white']:
+                if str(i) in self.board_ind['white']:
                     current_position['black_pool'] += 1
                 else:
                     current_position['white_pool'] += 1
@@ -233,41 +250,35 @@ class GameConsumer(WebsocketConsumer):
             if self.color == 'black' and i == 18 and j < kum:
                 current_position['black_pool'] += 1
                 j += 1
-        print(i)
-        print(board_ind.get(self.color))
-        if str(i) not in board_ind.get(self.color) and current_position[str(i)] != 'X':
+        if str(i) not in self.board_ind.get(self.color) and current_position[str(i)] != 'X':
             if current_position[str(i)] % 2 == 0:
                 current_position[f'{self.color}_pool'] += current_position[str(i)]
                 current_position[str(i)] = 0
-            elif current_position[str(i)] == 3 and i not in {1, 10} and current_position[str((i - 9) % 18)] != "X" and not self.red_sphere:
+            elif current_position[str(i)] == 3 and i not in {9, 18} and current_position[str((i - 9) % 18)] != "X" and not self.red_sphere:
                 current_position[f'{self.color}_pool'] += current_position[str(i)]
                 current_position[str(i)] = 'X'
                 self.red_sphere = True
 
         history.append(f'{start_field} - {i}')
 
-        winner, current_position = get_winner(game, board_ind, current_position)
+        winner, current_position = get_winner(game, current_position)
 
         update(current_position, history, color_turn, winner)
 
     def chat_message(self, event):
-        msg_type = event['msg_type']
+        print(event)
+        msg_type = event.get('msg_type')
 
-        if (msg_type == 'move'):
+        if msg_type == 'user_joined':
+            self.started = event['is_started']
+
+        self.send_back(**event)
+
+        """if msg_type == 'move':
             self.send_back(msg_type=msg_type, current_position=event['current_position'], winner=event['winner'])
 
-        # When player's opponent joined (it can't be seen by anyone except this player)
-        if (msg_type == 'opponent_joined') and (self.color != event['color']) and (event['color'] != 'spec') and (self.color != 'spec'):
-            self.send_to_group(msg_type='opponent_joined_echo', color=self.color)
-            if not self.started:
-                self.send_back(msg_type='opponent_joined')
-                self.started = True
-
-        # Echoing back to the opponent (it can't be seen by anyone except the opponent)
-        if (msg_type == 'opponent_joined_echo') and (self.color != event['color']) and (event['color'] != 'spec') and (self.color != 'spec'):
-            if not self.started:
-                self.send_back(msg_type='opponent_joined')
-                self.started = True
+        if msg_type == 'user_joined':
+            self.send_back(msg_type=msg_type, color=event['color'], username=event['username'])"""
 
     def send_back(self, msg_type=None, **kwargs):
         text_data = {'msgType': msg_type} | kwargs  # merging two dicts
