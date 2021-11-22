@@ -1,0 +1,29 @@
+#navbar span{
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+#logout {
+  display:inline;
+  min-width: 110px;
+  min-height: 30px;
+  width: 8.5%;
+  height: 80%;
+}
+
+nav {
+  background: #efefef;
+  font-family: 'Varela Round';
+  height: 100px; 
+}
+
+nav a {
+  transform: scale(1.5);
+  padding-left: 20px
+}
+
+#logout-button {
+  transform: scale(1.5);
+  margin-left: -120px
+}

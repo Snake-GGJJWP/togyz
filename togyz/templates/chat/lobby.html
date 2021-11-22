@@ -11,17 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/lobby.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 </head>
 <body>
-<div class="card shadow">
-<nav class="navbar navbar-light bg-light justify-content-between">
-  <a class="navbar-brand">{{request.user}}</a>
-  <div class="form-inline">
-    <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
-    <button id="logout-button" class="btn btn-outline-danger my-2 my-sm-0">Logout</button>
-  </div>
-</nav>
-</div>
+{% include 'imports/navbar.html' %}
     <form method="POST" action="{% url 'waiting_room' %}" id="game-form">
         {% csrf_token %}
         <!--What chat room would you like to enter?<br>

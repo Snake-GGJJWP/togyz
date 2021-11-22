@@ -75,16 +75,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
 class GameConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.user = self.scope['user']
-
         self.room_group_name = 'game_%s' % self.room_name
+        self.room_name = self._name_to_id(self.room_name)
+        self.user = self.scope['user']
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
         )
 
-        game = Game.objects.filter(name=self.room_name)[0]
+        game = Game.objects.filter(id=self.room_name).first()
 
         if self.user.username == game.player_white:
             self.color = 'white'
@@ -172,6 +172,7 @@ class GameConsumer(WebsocketConsumer):
             white_total = sum([current_position[str(i)] for i in self.board_ind['white'] if current_position[str(i)] != 'X'])
             black_total = sum([current_position[str(i)] for i in self.board_ind['black'] if current_position[str(i)] != 'X'])
 
+            # Why is it being counted before counting white and black pools?
             end_point_position = {str(i): 0 for i in range(1, 19)} | {'white_pool': current_position['white_pool'], 'black_pool': current_position['black_pool']}
             if self.color == 'white' and black_total == 0:
                 current_position['white_pool'] += white_total
@@ -183,7 +184,7 @@ class GameConsumer(WebsocketConsumer):
                 current_position = end_point_position
             return winner, current_position
 
-        game = Game.objects.filter(name=self.room_name)[0]
+        game = Game.objects.filter(id=self.room_name).first()
         history = json.loads(game.history)
         current_position = json.loads(game.current_position)
         color_turn = game.color_turn
@@ -264,6 +265,13 @@ class GameConsumer(WebsocketConsumer):
         winner, current_position = get_winner(game, current_position)
 
         update(current_position, history, color_turn, winner)
+
+    def _name_to_id(self, name):
+        i = 0
+        while name[i] == '0':
+            i += 1
+        game_id = name[i:]
+        return game_id
 
     def chat_message(self, event):
         print(event)
