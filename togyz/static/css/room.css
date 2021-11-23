@@ -1,7 +1,11 @@
+body {
+	font-family: "Varela Round";
+}
+
 #play-area {
 	margin-left: auto;
 	margin-right: auto;
-	width:800px;
+	width:1000px;
 	text-align: center;
 	display:table;
 }
@@ -35,6 +39,25 @@
 #chat-message-submit {
 	display: none;
 }
+
+#users {
+	display: inline-block;
+	margin-left: 20px;
+	font-size: 20px;
+}
+
+#users tr {
+	height: 214px;
+}
+
+.top-player {
+	vertical-align: top;
+}
+
+.bottom-player {
+	vertical-align: bottom;
+}
+
 
 .square {
 	width: 50px;
