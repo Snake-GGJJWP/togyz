@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 PROJECT_ROOT = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(PROJECT_ROOT, 'apps'))
+sys.path.insert(1, os.path.join(PROJECT_ROOT, 'modules'))
 
 
 # Quick-start development settings - unsuitable for production

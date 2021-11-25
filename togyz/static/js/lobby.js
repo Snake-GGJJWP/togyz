@@ -19,7 +19,3 @@ document.getElementById('black').onclick = function(e) {
     document.getElementById('option1').checked = false;
     document.getElementById('option2').checked = true;
 }
-
-document.getElementById('logout-button').onclick = function(e) {
-    window.location.pathname = '/auth/logout/';
-};

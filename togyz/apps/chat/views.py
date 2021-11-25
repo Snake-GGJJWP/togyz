@@ -17,9 +17,8 @@ def lobby(request):
 def room(request, room_name):
     # GAME MODEL ALTERED. NEED TO CHANGE THE LOGIC IN THIS FUNCTION AND consumers.GameConsumer.connect and consumers.GameConsumer.make_move
     game_id = _name_to_id(room_name)
-    try:
-        game = Game.objects.filter(id=game_id).first()
-    except IndexError:
+    game = Game.objects.filter(id=game_id).first()
+    if game is None:
         return redirect('lobby')
     player = User.objects.filter(username=request.user.username).first()
 

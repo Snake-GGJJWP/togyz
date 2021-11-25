@@ -1,0 +1,34 @@
+img {
+  height: auto;
+  max-width: 500px;
+  min-width: 255px;
+}
+
+table {
+  width: auto !important;
+  max-width: 100%;
+  min-width: 100%;
+}
+
+.header {
+  background-color: #a9fcf8;
+}
+
+.center img {
+  display: block;
+  width: 58vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center p {
+  width: 58vw;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.content { 
+  padding: 20px; 
+  font-family:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

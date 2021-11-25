@@ -84,6 +84,7 @@ class GameConsumer(WebsocketConsumer):
             self.channel_name
         )
 
+        print(self.room_name)
         game = Game.objects.filter(id=self.room_name).first()
 
         if self.user.username == game.player_white:
@@ -281,12 +282,6 @@ class GameConsumer(WebsocketConsumer):
             self.started = event['is_started']
 
         self.send_back(**event)
-
-        """if msg_type == 'move':
-            self.send_back(msg_type=msg_type, current_position=event['current_position'], winner=event['winner'])
-
-        if msg_type == 'user_joined':
-            self.send_back(msg_type=msg_type, color=event['color'], username=event['username'])"""
 
     def send_back(self, msg_type=None, **kwargs):
         text_data = {'msgType': msg_type} | kwargs  # merging two dicts
